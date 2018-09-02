@@ -137,6 +137,17 @@ button:hover {
   margin-top: 1.25em;
 }
 
+.error {
+  color: pink;
+  background-color: red;
+}
+
+.valid {
+  color: grey;
+  background-color: greenyellow;
+  border: 3px solid green;
+}
+
 /* ================================= 
   Helper Classes
 ==================================== */
