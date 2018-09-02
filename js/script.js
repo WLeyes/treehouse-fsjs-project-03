@@ -1,2 +1,2 @@
-// console.log('Connected to script.js');
+console.log('Connected to script.js');
 // $('.container').prepend('<div>Test</div>');
