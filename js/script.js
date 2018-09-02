@@ -41,6 +41,7 @@ $(document).ready(function () {
   // set focus to first input
   $('form input:text').first().focus();
   // hide all elements that need to be hidden
+  $basicInfo.titleOther.hide();
 });
 
 // todo: remove, test that my variables are correct
