@@ -2,12 +2,6 @@
   Base Element Styles
 ==================================== */
 
-/* Helper - Screen Reader text */
-
-.srt {
-  display: none;
-}
-
 * {
   box-sizing: border-box;
 }
