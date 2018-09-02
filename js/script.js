@@ -1,3 +1,41 @@
+////////////////////////////////////
+// Declare and assign variables
+
+const $variables = () => {
+  $container = $('.container')
+
+  $basicInfo = {
+    name: $('#name'),
+    email: $('#mail'),
+    title: $('#title'),
+    titleOther: $('#other-title')
+  }
+
+  $shirtInfo = {
+    size: $('#size'),
+    design: $('#design'),
+    color: $('#color')
+  }
+
+  $activities = {
+    checked: $(':checked')
+  }
+
+  $payment = {
+    creditCard: $('#cc-num'),
+    zipCode: $('#zip'),
+    cvv: $('#cvv'),
+    month: $('#exp-month'),
+    year: $('#year')
+  }
+
+  $submit = $('button[type="submit"]')
+
+}
+// call variables
+$variables();
+
+// Document Ready
 $(document).ready(function () {
   console.log('Connected to script.js');
   // set focus to first input
@@ -5,34 +43,13 @@ $(document).ready(function () {
   // hide all elements that need to be hidden
 });
 
-const formVariables = () => {
-
-  $basic = {
-    name: $('#name'),
-    email: $('#email'),
-    title: $('#title'),
-    titleOther: $('#other-title')
-  },
-
-  $shirt = {
-    size: $('#size'),
-    design: $('#design'),
-    color: $('#color')
-  },
-
-  $activities = {
-    check: $(':checked')
-  }
-
-  $payment = {
-    creditCard: $('#cc-num'),
-    zip: $('#zip'),
-    cvv: $('#cvv'),
-    month: $('#exp-month'),
-    year: $('#year')
-  }
-
-  $form = { 
-    submit: $('button[type="submit"]')
-  }
-}
+// todo: remove, test that my variables are correct
+$submit.on('click', event =>{
+  event.preventDefault();
+  console.log(
+    $basicInfo.name.val(),
+    $basicInfo.email.val(),
+    $basicInfo.title.val(),
+    $basicInfo.titleOther.val(),
+  );
+});
