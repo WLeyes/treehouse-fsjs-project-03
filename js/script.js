@@ -19,7 +19,8 @@ const $variables = () => {
   $shirt = {
     size: $('#size'),
     design: $('#design'),
-    color: $('#color')
+    color: $('#color'),
+    colorOption: $('#color option')
   };
 
   $activities = {
@@ -91,16 +92,43 @@ const Info = () => {
       }
     }
   });
+
+  // Listen for both valid name and email before displaying next section (TShirt selection)
   $('input').on('input' , function(event) {
     if( $('input[type="text"]').attr('data-valid') === 'true' && $('input[type="email"]').attr('data-valid') === 'true'){
-      $fieldset.shirt.fadeIn(3000);
+      $fieldset.shirt.fadeIn(2000);
+    }
+  });
+
+  $($basicInfo.title).on('change', function() {
+    if($(':selected').val() === 'other'){
+      $basicInfo.titleOther.fadeIn(1000);  
+    } else {
+      $basicInfo.titleOther.hide(); 
     }
   });
 
 }
 
 const Shirt = () => {
- 
+  // Hide color label
+  $($shirt.color).prev().hide();
+  // Hide color
+  $($shirt.color).hide();
+
+  // Listen for design change
+  $($shirt.design).on('change', function() {
+    // Display color if design is selected
+    if($($shirt.design).val() === 'js puns'){
+      $($shirt.color).prev().fadeIn(1000);
+      $($shirt.color).fadeIn(1000);
+    }
+  });
+  $($shirt.color).on('focus', () => {
+    $shirt.colorOption.each( function() {
+      console.log($(this).val());
+    });
+  });
 }
 
 const Activities = () => {
@@ -112,6 +140,7 @@ const Payment = () => {
 }
 
 Info();
+Shirt();
 // todo: remove, test that my variables are correct
 $submit.on('click', event => {
   event.preventDefault();
