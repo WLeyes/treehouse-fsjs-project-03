@@ -76,8 +76,7 @@ const Info = () => {
   event.preventDefault();
   // check if email is valid
   if($('input[type="email"]').val() !== '') {
-    // https://stackoverflow.com/questions/2507030/email-validation-using-jquery
-    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;// https://stackoverflow.com/questions/2507030/email-validation-using-jquery
       if(regex.test($(this).val()) === true) {
         if($('.error')){
           $('.error').remove();
@@ -88,7 +87,7 @@ const Info = () => {
         if($($error)){
           $($error).remove();
         }
-        $($fieldset.shirt).append('<div class="error">Please add valid email</div>')
+        $($fieldset.shirt).append('<div class="error">Please add valid email</div>');
       }
     }
   });
@@ -100,6 +99,7 @@ const Info = () => {
     }
   });
 
+  //  if job role other is selected 
   $($basicInfo.title).on('change', function() {
     if($(':selected').val() === 'other'){
       $basicInfo.titleOther.fadeIn(1000);  
@@ -116,18 +116,49 @@ const Shirt = () => {
   // Hide color
   $($shirt.color).hide();
 
+  $('#color option').hide();
   // Listen for design change
   $($shirt.design).on('change', function() {
     // Display color if design is selected
     if($($shirt.design).val() === 'js puns'){
+      if($($error)){
+        $($error).remove();
+      }
       $($shirt.color).prev().fadeIn(1000);
       $($shirt.color).fadeIn(1000);
+      // If puns is selected
+      $('#color option').attr("selected", false).hide();
+      $('#color option:contains("Puns")').attr("selected", true).show();
+
+      $fieldset.activities.fadeIn(2000);
+      
+      // If heart is selected
+    } else if($($shirt.design).val() === 'heart js'){
+      if($($error)){
+        $($error).remove();
+      }
+      $($shirt.color).prev().fadeIn(1000);
+      $($shirt.color).fadeIn(1000);
+      $('#color option').attr("selected", false).hide();
+      $('#color option:contains("♥")').attr("selected", true).show();
+
+      $fieldset.activities.fadeIn(2000);
+
+    } else {
+      if($($error)){
+        $($error).remove();
+      }
+      // Hide color label
+      $($shirt.color).prev().hide();
+      // Hide color
+      $($shirt.color).hide();
+  
+      $fieldset.activities.hide();
+      // error
+      if( $($shirt.design).val() === 'Select Theme'){
+        $($fieldset.shirt).append('<div class="error">Please select a shirt design</div>');
+      }
     }
-  });
-  $($shirt.color).on('focus', () => {
-    $shirt.colorOption.each( function() {
-      console.log($(this).val());
-    });
   });
 }
 
