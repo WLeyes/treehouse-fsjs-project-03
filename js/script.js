@@ -369,7 +369,7 @@ Info();
 Shirt();
 Activities();
 Payment();
-// todo: remove, test that my variables are correct
+
 $submit.on('click', event => {
   event.preventDefault();
   $submit.html('<div>Your personal information has been submitted to the "Dark web" and sold to the highest bidder!!</div>')
