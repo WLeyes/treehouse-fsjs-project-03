@@ -133,19 +133,19 @@ const Shirt = () => {
       $('#color option:contains("Puns")').attr("selected", true).show();
 
       $fieldset.activities.fadeIn(2000);
-      
+      $fieldset.payment.delay(4000).fadeIn(1000);
       // If heart is selected
     } else if($($shirt.design).val() === 'heart js'){
       if($($error)){
         $($error).remove();
       }
       $($shirt.color).prev().fadeIn(1000);
-      $($shirt.color).fadeIn(1000);
+      $($shirt.color).delay(4000).fadeIn(1000);
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("♥")').attr("selected", true).show();
 
       $fieldset.activities.fadeIn(2000);
-
+      $fieldset.payment.fadeIn(4000);
     } else {
       if($($error)){
         $($error).remove();
@@ -170,18 +170,19 @@ const Activities = () => {
 let total = parseInt($('input[name="all"]').parent().text().split('$')[1]); 
   $(':checkbox').on('click', function() {
       let array = parseInt($(`input[name="${$(this).attr('name')}"`).parent().text().split('$')[1]);
+      let temp = $(`input[name="${$(this).attr('name')}"]`).parent().text().split('—');
+        let containValue = temp[1].split(',')[0];
       // if checkbox is clicked add to total
       if($(`input[name="${$(this).attr('name')}"`).is(':checked')){
         total += array;
 
-        // check each checkbox against the selected to see if it contains same date and time, if so disable 
-        console.log( $(`input[name="${$(this).attr('name')}"`).parent().text().split('— '));
-        $(':checkbox').each( function() {
-          
-        });
-
-        // if checkbox is deselected subtract from total
+        // check each checkbox against the selected to see if it contains same date and time, if so disable
+        $(`label:contains("${containValue}")`).children().attr("disabled", true);
+        $(`label:contains("${containValue}")`).attr("disabled", true).css({color: 'red'});
+        $(this).attr("disabled", false);
       } else {
+        $(`label:contains("${containValue}")`).attr("disabled", true).css({color: '#000'});
+        $(`label:contains("${containValue}")`).children().attr("disabled", false);
         total -= array;
       }
       // remove running total div
