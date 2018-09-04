@@ -4,31 +4,35 @@
 const $variables = () => {
   $container = $('.container');
   $fieldset = {
-    shirt: $('fieldset:nth-of-type(2)'),
+    shirt:      $('fieldset:nth-of-type(2)'),
     activities: $('fieldset:nth-of-type(3)'),
-    payment: $('fieldset:nth-of-type(4)')
+    payment:    $('fieldset:nth-of-type(4)')
   }
 
   $basicInfo = {
-    name: $('#name'),
-    email: $('#mail'),
-    title: $('#title'),
+    name:       $('#name'),
+    email:      $('#mail'),
+    title:      $('#title'),
     titleOther: $('#other-title')
   };
 
   $shirt = {
-    size: $('#size'),
-    design: $('#design'),
-    color: $('#color'),
+    size:        $('#size'),
+    design:      $('#design'),
+    color:       $('#color'),
     colorOption: $('#color option')
   };
 
   $payment = {
-    creditCard: $('#cc-num'),
-    zipCode: $('#zip'),
-    cvv: $('#cvv'),
-    month: $('#exp-month'),
-    year: $('#year')
+    creditCardDiv: $('#credit-card'),
+    paypalDiv:     $('#credit-card').next(),
+    bitcoinDiv:    $('#credit-card').next().next(),
+    paymentSelect: $('#payment'),
+    creditCard:    $('#cc-num'),
+    zipCode:       $('#zip'),
+    cvv:           $('#cvv'),
+    month:         $('#exp-month'),
+    year:          $('#year')
   };
 
   $submit = $('button[type="submit"]');
@@ -103,13 +107,12 @@ const Info = () => {
 
   //  if job role other is selected 
   $($basicInfo.title).on('change', function() {
-    if($(':selected').val() === 'other'){
+  if($(':selected').val() === 'other'){
       $basicInfo.titleOther.fadeIn(1000);  
     } else {
       $basicInfo.titleOther.hide(); 
     }
   });
-
 }
 
 const Shirt = () => {
@@ -179,7 +182,7 @@ let total = parseInt($('input[name="all"]').parent().text().split('$')[1]);
         // check each checkbox against the selected to see if it contains same date and time, if so disable
         $(`label:contains("${containValue}")`).children().attr("disabled", true);
         $(`label:contains("${containValue}")`).attr("disabled", true).css({color: 'red'});
-        $(this).attr("disabled", false);
+        $(this).attr("disabled", false).parent().css({color: 'green'});
       } else {
         $(`label:contains("${containValue}")`).attr("disabled", true).css({color: '#000'});
         $(`label:contains("${containValue}")`).children().attr("disabled", false);
@@ -197,12 +200,41 @@ let total = parseInt($('input[name="all"]').parent().text().split('$')[1]);
 }
 
 const Payment = () => {
- 
+ $payment.creditCardDiv.hide()
+ $payment.paypalDiv.hide();
+ $payment.bitcoinDiv.hide();
+  if($($payment.paymentSelect).val() === 'credit card'){
+    $payment.creditCardDiv.show();
+  }
+  $($payment.paymentSelect).on('change', function() {
+    if($('#payment :selected').val() === 'credit card'){
+      $payment.paypalDiv.hide();
+      $payment.bitcoinDiv.hide();
+      $payment.creditCardDiv.fadeIn(1000);
+      $($submit).show().attr("disabled", true);
+    } else if($('#payment :selected').val() === 'paypal'){
+      $payment.creditCardDiv.hide();
+      $payment.bitcoinDiv.hide();
+      $payment.paypalDiv.fadeIn(1000);
+      $($submit).show().attr("disabled", true);
+    } else if($('#payment :selected').val() === 'bitcoin'){
+      $payment.creditCardDiv.hide();
+      $payment.paypalDiv.hide();
+      $payment.bitcoinDiv.fadeIn(1000);
+      $($submit).show().attr("disabled", true);
+    } else {
+      $payment.creditCardDiv.hide();
+      $payment.paypalDiv.hide();
+      $payment.bitcoinDiv.hide();
+      $($submit).hide();
+    }
+  });
 }
 
 Info();
 Shirt();
 Activities();
+Payment();
 // todo: remove, test that my variables are correct
 $submit.on('click', event => {
   event.preventDefault();
