@@ -32,7 +32,7 @@ const $variables = () => {
     zipCode:       $('#zip'),
     cvv:           $('#cvv'),
     month:         $('#exp-month'),
-    year:          $('#year')
+    year:          $('#exp-year')
   };
 
   $submit = $('button[type="submit"]');
@@ -101,7 +101,7 @@ const Info = () => {
   // Listen for both valid name and email before displaying next section (TShirt selection)
   $('input').on('input change' , function(event) {
     if( $('input[type="text"]').attr('data-valid') === 'true' && $('input[type="email"]').attr('data-valid') === 'true'){
-      $fieldset.shirt.fadeIn(2000);
+      $fieldset.shirt.fadeIn(1000);
     }
   });
 
@@ -135,20 +135,20 @@ const Shirt = () => {
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("Puns")').attr("selected", true).show();
 
-      $fieldset.activities.fadeIn(2000);
-      $fieldset.payment.delay(4000).fadeIn(1000);
+      $fieldset.activities.fadeIn(1000);
+      $fieldset.payment.fadeIn(1000);
       // If heart is selected
     } else if($($shirt.design).val() === 'heart js'){
       if($($error)){
         $($error).remove();
       }
       $($shirt.color).prev().fadeIn(1000);
-      $($shirt.color).delay(4000).fadeIn(1000);
+      $($shirt.color).fadeIn(1000);
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("♥")').attr("selected", true).show();
 
-      $fieldset.activities.fadeIn(2000);
-      $fieldset.payment.fadeIn(4000);
+      $fieldset.activities.fadeIn(1000);
+      $fieldset.payment.fadeIn(1000);
     } else {
       if($($error)){
         $($error).remove();
@@ -200,35 +200,169 @@ let total = parseInt($('input[name="all"]').parent().text().split('$')[1]);
 }
 
 const Payment = () => {
+//  hide payment sections
  $payment.creditCardDiv.hide()
  $payment.paypalDiv.hide();
  $payment.bitcoinDiv.hide();
+
+ $payment.zipCode.hide();
+ $payment.zipCode.parent().hide();
+
+ $payment.cvv.hide();
+ $payment.cvv.parent().hide();
+ 
+$payment.month.hide();
+$payment.month.prev().hide();
+
+$payment.year.hide();
+$payment.year.prev().hide();
+
+ $(`[value="select_method"]`).attr("disabled", true);
+ $(`[value="credit card"]`).attr("selected",true);
+
+//  toggle to show credit card input
   if($($payment.paymentSelect).val() === 'credit card'){
+    if($($error)){
+      $($error).remove();
+    }
     $payment.creditCardDiv.show();
   }
+  // Payment method select
   $($payment.paymentSelect).on('change', function() {
     if($('#payment :selected').val() === 'credit card'){
+      if($($error)){
+        $($error).remove();
+      }
       $payment.paypalDiv.hide();
       $payment.bitcoinDiv.hide();
       $payment.creditCardDiv.fadeIn(1000);
-      $($submit).show().attr("disabled", true);
+      
     } else if($('#payment :selected').val() === 'paypal'){
+      if($($error)){
+        $($error).remove();
+      }
       $payment.creditCardDiv.hide();
       $payment.bitcoinDiv.hide();
       $payment.paypalDiv.fadeIn(1000);
-      $($submit).show().attr("disabled", true);
+      $($submit).show();
     } else if($('#payment :selected').val() === 'bitcoin'){
+      if($($error)){
+        $($error).remove();
+      }
       $payment.creditCardDiv.hide();
       $payment.paypalDiv.hide();
       $payment.bitcoinDiv.fadeIn(1000);
       $($submit).show().attr("disabled", true);
     } else {
+      if($($error)){
+        $($error).remove();
+      }
       $payment.creditCardDiv.hide();
       $payment.paypalDiv.hide();
       $payment.bitcoinDiv.hide();
       $($submit).hide();
     }
   });
+
+  $($payment.creditCard).on('focusout input', function(event) {
+    event.preventDefault();
+    // Check that cc # is between 13 and 16 digits long
+    if($(this).val().length >= 13 && $(this).val().length <= 16 && $(this).val().match(/^\d+$/)) {
+      if($($error)){
+        $($error).remove();
+      }
+      $(this).css({border: '3px solid green', backgroundColor: 'lightgreen'}).attr({'data-valid': 'true'});
+      $payment.zipCode.fadeIn(1000);
+      $payment.zipCode.parent().fadeIn(1000);
+      // check if only digits
+    } else if(!$(this).val().match(/^\d+$/)){
+      if($($error)){
+        $($error).remove();
+      }
+      $(this).css({border: '3px solid red', backgroundColor: 'pink'}).attr({placeholder: 'Required'}).attr({'data-valid': 'false'});
+      $fieldset.payment.prepend('<div class="error">Card must only contain digits</div>');
+    } else {
+      if($($error)){
+        $($error).remove();
+      }
+      $payment.zipCode.hide();
+      $payment.zipCode.parent().hide();
+      $(this).css({border: '3px solid red', backgroundColor: 'pink'}).attr({placeholder: 'Required'}).attr({'data-valid': 'false'});
+      if($(this).val().length < 13 || $(this).val().length > 16){
+        $fieldset.payment.prepend('<div class="error">Card must be between 13 and 16 digits</div>');
+      }
+    }
+    
+  });
+
+  $($payment.zipCode).on('focusout input', function(event) {
+    event.preventDefault();
+    // Check that zip is between 5 and 7 digits long
+    if($(this).val().length >= 5 && $(this).val().length <= 7) {
+      if($($error)){
+        $($error).remove();
+      }
+      $(this).css({border: '3px solid green', backgroundColor: 'lightgreen'}).attr({'data-valid': 'true'});
+      $payment.cvv.fadeIn(1000);
+      $payment.cvv.parent().fadeIn(1000);
+    } else {
+      if($($error)){
+        $($error).remove();
+      }
+      $payment.cvv.hide();
+      $payment.cvv.parent().hide();
+      $(this).css({border: '3px solid red', backgroundColor: 'pink'}).attr({placeholder: 'Required'}).attr({'data-valid': 'false'});
+      if($(this).val().length < 5 || $(this).val().length > 7){
+        $fieldset.payment.prepend('<div class="error">Zip/Postal code must be between 5 and 7 characters</div>');
+      }
+    }
+    // check if only digits
+    if(!$(this).val().match(/^\d+$/)){
+      if($($error)){
+        $($error).remove();
+      }
+      $(this).css({border: '3px solid red', backgroundColor: 'pink'}).attr({placeholder: 'Required'}).attr({'data-valid': 'false'});
+      $fieldset.payment.prepend('<div class="error">Card must only contain digits</div>');
+    }
+  });
+
+  $($payment.cvv).on('focusout input', function(event) {
+    event.preventDefault();
+    // Check that cvv equals 3 digits
+    if($(this).val().length === 3) {
+      if($($error)){
+        $($error).remove();
+      }
+      $(this).css({border: '3px solid green', backgroundColor: 'lightgreen'}).attr({'data-valid': 'true'});
+      $payment.month.fadeIn(1000);
+      $payment.month.prev().fadeIn(1000);
+      $payment.year.delay(1000).fadeIn(1000);
+      $payment.year.prev().delay(1000).fadeIn(1000);
+      $submit.delay(2000).fadeIn(1000);
+    } else {
+      if($($error)){
+        $($error).remove();
+      }
+      $payment.month.hide();
+      $payment.month.prev().hide();
+      $payment.year.hide();
+      $payment.year.prev().hide();
+      $submit.hide();
+      $(this).css({border: '3px solid red', backgroundColor: 'pink'}).attr({placeholder: 'Required'}).attr({'data-valid': 'false'});
+      if($(this).val().length < 5 || $(this).val().length > 7){
+        $fieldset.payment.prepend('<div class="error">cvv must be 3 digits long</div>');
+      }
+    }
+    // check if only digits
+    if(!$(this).val().match(/^\d+$/)){
+      if($($error)){
+        $($error).remove();
+      }
+      $(this).css({border: '3px solid red', backgroundColor: 'pink'}).attr({placeholder: 'Required'}).attr({'data-valid': 'false'});
+      $fieldset.payment.prepend('<div class="error">Card must only contain digits</div>');
+    }
+  });
+
 }
 
 Info();
@@ -238,8 +372,7 @@ Payment();
 // todo: remove, test that my variables are correct
 $submit.on('click', event => {
   event.preventDefault();
-  // Info();
-  Shirt();
-  Activities();
-  Payment();
+  $submit.html('<div>Your personal information has been submitted to the "Dark web" and sold to the highest bidder!!</div>')
+    .attr('disabled', true)
+    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px'});
 });
