@@ -413,5 +413,5 @@ $submit.on('click', event => {
   event.preventDefault();
   $submit.html('<div>Your personal information has been submitted to the "Dark web" and sold to the highest bidder!!</div>')
     .attr('disabled', true)
-    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px'});
+    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px', cursor: 'default'});
 });
