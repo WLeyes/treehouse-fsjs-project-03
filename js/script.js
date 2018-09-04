@@ -351,7 +351,8 @@ $payment.year.prev().hide();
       $payment.month.prev().fadeIn(1000);
       $payment.year.delay(1000).fadeIn(1000);
       $payment.year.prev().delay(1000).fadeIn(1000);
-      $submit.delay(2000).fadeIn(1000);
+      
+      $fieldset.payment.prepend('<div class="error">Please select expiry date</div>');
     } else {
       if($($error)){
         $($error).remove();
@@ -375,7 +376,31 @@ $payment.year.prev().hide();
       $fieldset.payment.prepend('<div class="error">Card must only contain digits</div>');
     }
   });
-
+  $($payment.creditCardDiv).on('change', function() {
+    
+    if($('#exp-month > option:selected') || $('#exp-year > option:selected')){
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth(); 
+      if($($error)){
+        $($error).remove();
+      }
+      if( $($payment.year).val() < currentYear){
+        if($($error)){
+          $($error).remove();
+        }
+        $fieldset.payment.prepend(`<div class="error">Your card is expired: ${ $($payment.year).val() } - ${ $('#exp-month option:selected').html() }</div>`);
+      } else if( $($payment.month).val() < currentMonth && $($payment.year).val() == currentYear) {
+        if($($error)){
+          $($error).remove();
+        }
+        $fieldset.payment.prepend(`<div class="error">Your card is expired: ${ $($payment.year).val() } - ${ $('#exp-month option:selected').html() }</div>`);
+      } else {
+        $submit.fadeIn(1000);
+      }
+      console.log($payment.year.val(), $payment.month.val());
+    console.log(currentYear, currentMonth)
+    }
+  });
 }
 
 Info();
