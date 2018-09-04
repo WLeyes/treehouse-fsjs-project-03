@@ -56,6 +56,15 @@ $(document).ready(function () {
   $($submit).hide();
 });
 
+const background = () => {
+  $('body').css({ width:'100%', height: '100%',
+    background: `linear-gradient(to bottom right,
+    rgb( ${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)} ),
+    rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})
+  ) no-repeat fixed center`})
+}
+background();
+setInterval(background,5000);
 
 const Info = () => {
   // Set my validation tracker to false
@@ -125,6 +134,7 @@ const Shirt = () => {
   // Listen for design change
   $($shirt.design).on('change', function() {
     // Display color if design is selected
+   
     if($($shirt.design).val() === 'js puns'){
       if($($error)){
         $($error).remove();
@@ -134,7 +144,6 @@ const Shirt = () => {
       // If puns is selected
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("Puns")').attr("selected", true).show();
-
       $fieldset.activities.fadeIn(1000);
       $fieldset.payment.fadeIn(1000);
       // If heart is selected
@@ -146,7 +155,6 @@ const Shirt = () => {
       $($shirt.color).fadeIn(1000);
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("♥")').attr("selected", true).show();
-
       $fieldset.activities.fadeIn(1000);
       $fieldset.payment.fadeIn(1000);
     } else {
@@ -164,6 +172,11 @@ const Shirt = () => {
         $($fieldset.shirt).append('<div class="error">Please select a shirt design</div>');
       }
     }
+  });
+  // Change the form backgrounf color on change
+  $('#color').on('change', function() {
+    $('form').css("background", `${ $('#color option:selected').val() }`);
+    console.log($('#color option:selected').val());
   });
 }
 
@@ -369,6 +382,7 @@ Info();
 Shirt();
 Activities();
 Payment();
+
 
 $submit.on('click', event => {
   event.preventDefault();
