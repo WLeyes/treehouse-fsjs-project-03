@@ -148,6 +148,11 @@ button:hover {
 
 .green {
   color: green;
+  font-weight: bolder;
+  line-height: 1.5;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .valid {

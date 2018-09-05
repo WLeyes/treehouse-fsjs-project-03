@@ -54,6 +54,7 @@ $(document).ready(function () {
   $($fieldset.activities).hide();
   $($fieldset.payment).hide();
   $($submit).hide();
+  $(':input[type="submit"]').prop('disabled', true);
 });
 
 const background = () => {
@@ -143,7 +144,7 @@ const Shirt = () => {
       $($shirt.color).fadeIn(1000);
       // If puns is selected
       $('#color option').attr("selected", false).hide();
-      $('#color option:contains("Puns")').attr("selected", true).show();
+      $('#color option:contains("Puns")').attr("selected", true).fadeIn(1000);
       $fieldset.activities.fadeIn(1000);
       $($fieldset.activities).prepend('<div class="error">Please select at least 1 activity</div>');
       // If heart is selected
@@ -154,7 +155,7 @@ const Shirt = () => {
       $($shirt.color).prev().fadeIn(1000);
       $($shirt.color).fadeIn(1000);
       $('#color option').attr("selected", false).hide();
-      $('#color option:contains("♥")').attr("selected", true).show();
+      $('#color option:contains("♥")').attr("selected", true).fadeIn(1000);
       $fieldset.activities.fadeIn(1000);
       $($fieldset.activities).prepend('<div class="error">Please select at least 1 activity</div>');
     } else {
@@ -253,7 +254,7 @@ $payment.year.prev().hide();
     if($($error)){
       $($error).remove();
     }
-    $payment.creditCardDiv.show();
+    $payment.creditCardDiv.fadeIn(1000);
   }
   // Payment method select
   $($payment.paymentSelect).on('change', function() {
@@ -272,7 +273,8 @@ $payment.year.prev().hide();
       $payment.creditCardDiv.hide();
       $payment.bitcoinDiv.hide();
       $payment.paypalDiv.fadeIn(1000);
-      $($submit).show();
+      $($submit).fadeIn(1000);
+      $($submit).attr('disabled', false);
     } else if($('#payment :selected').val() === 'bitcoin'){
       if($($error)){
         $($error).remove();
@@ -280,7 +282,8 @@ $payment.year.prev().hide();
       $payment.creditCardDiv.hide();
       $payment.paypalDiv.hide();
       $payment.bitcoinDiv.fadeIn(1000);
-      $($submit).show().attr("disabled", true);
+      $($submit).fadeIn(1000).attr("disabled", true);
+      $($submit).attr('disabled', false);
     } else {
       if($($error)){
         $($error).remove();
@@ -410,6 +413,7 @@ $payment.year.prev().hide();
         }
         $fieldset.payment.prepend(`<div class="error">Your card is expired: ${ $($payment.year).val() } - ${ $('#exp-month option:selected').html() }</div>`);
       } else {
+        $($submit).attr('disabled', false);
         $submit.fadeIn(1000);
       }
       console.log($payment.year.val(), $payment.month.val());
@@ -424,11 +428,12 @@ Activities();
 Payment();
 
 
-$submit.on('click', event => {
+$('form').submit(function(event) {
   event.preventDefault();
   $('form').html('<div>Your personal information has been <span class="green">submitted</span> to the "Dark web" and sold to the highest bidder!!</div>')
     .attr('disabled', true)
-    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px', fontSize: '1.5em',cursor: 'default'});
+    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px', fontSize: '1.5em',cursor: 'default'})
+    .submit(false);
     
     let seconds = 10;
     setInterval(()=>{
