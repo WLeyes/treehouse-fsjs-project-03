@@ -145,7 +145,7 @@ const Shirt = () => {
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("Puns")').attr("selected", true).show();
       $fieldset.activities.fadeIn(1000);
-      $fieldset.payment.fadeIn(1000);
+      $($fieldset.activities).prepend('<div class="error">Please select at least 1 activity</div>');
       // If heart is selected
     } else if($($shirt.design).val() === 'heart js'){
       if($($error)){
@@ -156,7 +156,7 @@ const Shirt = () => {
       $('#color option').attr("selected", false).hide();
       $('#color option:contains("♥")').attr("selected", true).show();
       $fieldset.activities.fadeIn(1000);
-      $fieldset.payment.fadeIn(1000);
+      $($fieldset.activities).prepend('<div class="error">Please select at least 1 activity</div>');
     } else {
       if($($error)){
         $($error).remove();
@@ -173,6 +173,7 @@ const Shirt = () => {
       }
     }
   });
+  
   // Change the form backgrounf color on change
   $('#color').on('change', function() {
     $('form').css("background", `${ $('#color option:selected').val() }`);
@@ -180,18 +181,20 @@ const Shirt = () => {
   });
 }
 
-const Activities = () => {
- $('input[name="all"]').prop('checked', true).attr('disabled',true);
-//  Set initial total;   
-let total = parseInt($('input[name="all"]').parent().text().split('$')[1]); 
-  $(':checkbox').on('click', function() {
+const Activities = () => {  
+    let total = 0;
+    $(':checkbox').on('click', function() {
+      if($($error)){
+        $($error).remove();
+      }
       let array = parseInt($(`input[name="${$(this).attr('name')}"`).parent().text().split('$')[1]);
       let temp = $(`input[name="${$(this).attr('name')}"]`).parent().text().split('—');
-        let containValue = temp[1].split(',')[0];
+      let containValue = temp[1].split(',')[0];
+
       // if checkbox is clicked add to total
       if($(`input[name="${$(this).attr('name')}"`).is(':checked')){
         total += array;
-
+        
         // check each checkbox against the selected to see if it contains same date and time, if so disable
         $(`label:contains("${containValue}")`).children().attr("disabled", true);
         $(`label:contains("${containValue}")`).attr("disabled", true).css({color: 'red'});
@@ -204,6 +207,15 @@ let total = parseInt($('input[name="all"]').parent().text().split('$')[1]);
       // remove running total div
     if($('.total')){
       $('.total').remove();
+    }
+    if(total == 0){
+      if($($error)){
+        $($error).remove();
+      }
+      $($fieldset.activities).prepend('<div class="error">Please select at least 1 activity</div>');
+      $fieldset.payment.hide();
+    } else {
+      $($fieldset.payment).fadeIn(1000)
     }
     // add updated total to DOM
     $fieldset.activities.append(`<div class="total">Total: $${total}.00</div>`);
