@@ -176,10 +176,13 @@ const Shirt = () => {
   
   // Change the form backgrounf color on change
   $('#color').on('change', function() {
-    $('form').css("background", `${ $('#color option:selected').val() }`);
+    $('form').css({background: `${ $('#color option:selected').val() }`});
     console.log($('#color option:selected').val());
   });
 }
+
+// adjust form style
+$('form').css({borderRadius: '20px'});
 
 const Activities = () => {  
     let total = 0;
@@ -423,7 +426,19 @@ Payment();
 
 $submit.on('click', event => {
   event.preventDefault();
-  $submit.html('<div>Your personal information has been submitted to the "Dark web" and sold to the highest bidder!!</div>')
+  $('form').html('<div>Your personal information has been <span class="green">submitted</span> to the "Dark web" and sold to the highest bidder!!</div>')
     .attr('disabled', true)
-    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px', cursor: 'default'});
+    .css({backgroundColor: 'grey', color: '#fff', borderRadius: '10px', fontSize: '1.5em',cursor: 'default'});
+    
+    let seconds = 10;
+    setInterval(()=>{
+      if($($error)){
+        $($error).remove();
+      }
+      seconds--
+      $('form').append(`<div class="error">Self desrtucting in ${seconds} seconds!</div>`)
+      if(seconds == 0){
+        location.reload();
+      }
+    },1000);
 });

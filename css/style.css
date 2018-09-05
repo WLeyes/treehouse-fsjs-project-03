@@ -140,6 +140,14 @@ button:hover {
 .error {
   color: pink;
   background-color: red;
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+
+.green {
+  color: green;
 }
 
 .valid {
