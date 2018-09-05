@@ -407,7 +407,7 @@ $payment.year.prev().hide();
           $($error).remove();
         }
         $fieldset.payment.prepend(`<div class="error">Your card is expired: ${ $($payment.year).val() } - ${ $('#exp-month option:selected').html() }</div>`);
-      } else if( $($payment.month).val() < currentMonth && $($payment.year).val() == currentYear) {
+      } else if( ($($payment.month).val() - 1 )< currentMonth && $($payment.year).val() == currentYear) {
         if($($error)){
           $($error).remove();
         }
@@ -441,7 +441,7 @@ $('form').submit(function(event) {
         $($error).remove();
       }
       seconds--
-      $('form').append(`<div class="error">Self desrtucting in ${seconds} seconds!</div>`)
+      $('form').append(`<div class="error">Self-destructing in ${seconds} seconds!</div>`)
       if(seconds == 0){
         location.reload();
       }
